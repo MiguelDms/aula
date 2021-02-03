@@ -1,0 +1,6 @@
+1;Comprei uma bola;30.0
+2;Comprei um gelado;30.0
+3;Comprei uma girafa;30.0
+4;Comprei uma bola;30.0
+5;Comprei um gelado;30.0
+6;Comprei uma girafa;30.0

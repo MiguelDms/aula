@@ -1,0 +1,6 @@
+Carro;Cliente;Reparação;Valor
+
+honda;Miguel;agua;20
+mercedez;Miguel;oleo;20
+honda;Miguel;agua;20
+mercedez;Miguel;oleo;20
