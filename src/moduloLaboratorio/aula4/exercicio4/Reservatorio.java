@@ -4,11 +4,12 @@ import java.util.LinkedList;
 
 public class Reservatorio {
 
-    public static final int MAX_TAREFAS = 5;
+    private static final int MAX_TAREFAS = 5;
     private LinkedList<Tarefa> listaTarefas = new LinkedList();
 
     public synchronized void insereTarefa(Tarefa t) throws InterruptedException {
         while (listaTarefas.size() >= MAX_TAREFAS) {
+            System.out.println("herer");
             wait();
         }
 
