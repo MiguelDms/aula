@@ -51,6 +51,7 @@ public class Barbearia {
                 cliente.clienteSaiERegressa(cadeiraAOcupar);
             }
 
+
         }
 
         notifyAll();
