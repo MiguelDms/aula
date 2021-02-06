@@ -10,11 +10,8 @@ public class Cliente extends Thread{
     private Barbearia b;
     private CyclicBarrier c;
     private boolean corteCabelo = false;
-    private boolean sentado;
-
-    public boolean isSentado() {
-        return sentado;
-    }
+    private Cadeira cadeira;
+    private boolean sentado = false;
 
     public Cliente(String nome, Barbearia b, CyclicBarrier c) {
         this.nome = nome;
@@ -22,26 +19,37 @@ public class Cliente extends Thread{
         this.c = c;
     }
 
+    public Cadeira getCadeira() {
+        return cadeira;
+    }
 
+    public void setCadeira(Cadeira cadeira) {
+        this.cadeira = cadeira;
+    }
 
     @Override
     public void run() {
         while(!corteCabelo) {
             try {
-               Cadeira cadeira = b.getCadeira(this);
+                 b.getCadeira(this);
+             if (getCadeira() != null) {
                  if (cadeira.getTipo().equals("Cadeira do corte")) {
-                    System.out.println("O cliente " + nome + " sentou-se na " + cadeira.getTipo() + " numero " + cadeira.getNumeroCadeira());
-                    sentado = true;
-                    sleep(3000);
-                    System.out.println("O cliente " + nome + " sai do barbeiro com um corte de cabelo á maneira");
-                    corteCabelo = true;
-                    cadeira.setEstado(false);
-                    c.await();
-                    b.setAtendidos(1);
-                } else {
-                    System.out.println("O cliente " + nome + " sentou-se na " + cadeira.getTipo() + " numero " + cadeira.getNumeroCadeira() + " e está em espera");
-                    sentado = true;
-                }
+                     System.out.println("O cliente " + nome + " sentou-se na " + cadeira.getTipo() + " numero " + cadeira.getNumeroCadeira());
+                     sleep(3000);
+                     System.out.println("O cliente " + nome + " sai do barbeiro com um corte de cabelo á maneira");
+                     corteCabelo = true;
+                     cadeira.setEstado(false);
+                     b.getListaCadeiras().add(cadeira);
+                     c.await();
+                     b.setAtendidos(1);
+                 } else {
+                     if (sentado == false) {
+                         System.out.println("O cliente " + nome + " sentou-se na " + cadeira.getTipo() + " numero " + cadeira.getNumeroCadeira() + " e está em espera");
+                     }
+                     sentado = true;
+                 }
+             }
+
 
             } catch (InterruptedException | BrokenBarrierException e) {
                 e.printStackTrace();
@@ -53,7 +61,7 @@ public class Cliente extends Thread{
         if (cadeiraAOcupar == null) {
             System.out.println("Não existe cadeira para o cliente " + nome + " e ele vai sair do barbeiro");
             try {
-                sleep(new Random().nextInt(3000) + 3000);
+                sleep(new Random().nextInt(10000) + 3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -32,34 +32,46 @@ public class Barbearia {
         return cadeiraDoCorte;
     }
 
-    public synchronized Cadeira getCadeira(Cliente cliente) {
-        Cadeira cadeiraAOcupar = null;
+    public synchronized void getCadeira(Cliente cliente) {
 
-        while (cadeiraAOcupar == null) {
 
-            for (Cadeira c : listaCadeiras) {
-                if (!c.getEstado()) {
-                    cadeiraAOcupar = c;
-                }
+        if (cliente.getCadeira() != null) {
+            if (cliente.getCadeira().getTipo().equals("Cadeira espera") && !cadeiraDoCorte.getEstado()) {
+                cliente.getCadeira().setEstado(false);
+                listaCadeiras.add(cliente.getCadeira());
+                cliente.setCadeira(cadeiraDoCorte);
+                cliente.getCadeira().setEstado(true);
+                listaCadeiras.remove(cadeiraDoCorte);
             }
-
-            if (cadeiraAOcupar != null) {
-                cadeiraAOcupar.setEstado(true);
-            }
-
-            if (!cliente.isSentado()) {
-                cliente.clienteSaiERegressa(cadeiraAOcupar);
-            }
-
-
         }
 
+        if (cliente.getCadeira() == null) {
+
+            if (listaCadeiras.size() > 0) {
+                Cadeira cadeira = null;
+                for (Cadeira c : listaCadeiras) {
+                    if (!c.getEstado() && cliente.getCadeira() == null) {
+                        cliente.setCadeira(c);
+                        cliente.getCadeira().setEstado(true);
+                        cadeira = c;
+                    }
+                }
+                listaCadeiras.remove(cadeira);
+            }
+
+            if (cliente.getCadeira() == null) {
+                cliente.clienteSaiERegressa(cliente.getCadeira());
+            }
+        }
         notifyAll();
-        return cadeiraAOcupar;
     }
 
     public int getAtendidos() {
         return atendidos;
+    }
+
+    public List<Cadeira> getListaCadeiras() {
+        return listaCadeiras;
     }
 
     public void setAtendidos(int atendidos) {
