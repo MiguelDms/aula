@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AMinhaTarefa implements Runnable{
+    private List<String> listaPalavras;
+
+    public AMinhaTarefa(List<String> p) {
+        this.listaPalavras = p;
+    }
 
     @Override
     public void run() {
@@ -15,22 +20,14 @@ public class AMinhaTarefa implements Runnable{
 
     public void readMy() {
 
-        List<String> listaPalavras = new ArrayList<>();
+        for (int i = 0; i < listaPalavras.size(); i++) {
+            String word = listaPalavras.get(i);
+            String cap = word.substring(0, 1).toUpperCase() + word.substring(1);
+            listaPalavras.set(i, cap);
+        }
 
-        try {
-            File myObj = new File("C:\\Users\\Utilizador\\IdeaProjects\\Novo1\\src\\moduloLaboratorio\\aula4" +
-                    "\\exercicio1\\fiche.txt");
-            Scanner myReader = new Scanner(myObj);
-            myReader.useDelimiter(" ");
-            while (myReader.hasNext()) {
-                String word = myReader.next();
-                   String cap = word.substring(0, 1).toUpperCase() + word.substring(1);
-                   listaPalavras.add(cap);
-            }
-            myReader.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        for (String l : listaPalavras) {
+            //System.out.println(l);
         }
     }
 }
